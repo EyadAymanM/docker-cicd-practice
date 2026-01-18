@@ -1,16 +1,19 @@
 import express from 'express';
 import { configDotenv } from 'dotenv';
+import usersRouter from './routes/users.router.js';
 
 configDotenv();
 
 const app = express();
 
-const PORT = process.env.PORT;
+// Middleware
+app.use(express.json());
 
-app.get('/',(_req,res)=>{
-  res.json({message: "app running successfully!", status: "success"});
+// Routes
+app.get('/', (_req, res) => {
+  res.json({ message: 'app running successfully!', status: 'success' });
 });
 
-app.listen(PORT, ()=>{
-  console.log(`app is running on Port: ${PORT}`)
-});
+app.use('/users', usersRouter);
+
+export default app;

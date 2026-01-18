@@ -818,8 +818,8 @@ docker-compose exec mysql mysqladmin ping -h localhost
 
 ## Checklist for Completion
 
-- [ ] Docker Desktop installed and running
-- [ ] Node.js API project created with Express
+- [x] Docker Desktop installed and running
+- [x] Node.js API project created with Express
 - [ ] MySQL connection working
 - [ ] Jest tests written and passing locally
 - [ ] Dockerfile created and tested
