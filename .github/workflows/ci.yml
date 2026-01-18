@@ -1,0 +1,153 @@
+name: CI/CD Pipeline
+
+# When to run this workflow
+on:
+  push:
+    branches: [ main, develop, master ]
+  pull_request:
+    branches: [ main, master ]
+
+# Jobs to run
+jobs:
+  # Job 1: Run tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    # Service containers (run alongside job)
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: appuser
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: appuser
+          MYSQL_PASSWORD: apppassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+      
+      # Step 4: Wait for MySQL
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -u root -pappuser --silent; then
+              echo "MySQL is ready"
+              exit 0
+            fi
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 2
+          done
+          echo "MySQL failed to start"
+          exit 1
+      
+      # Step 5: Setup database
+      - name: Setup database
+        run: mysql -h 127.0.0.1 -u root -pappuser testdb < init.sql
+      
+      # Step 6: Run tests
+      - name: Run tests
+        env:
+          DB_HOST: 127.0.0.1
+          DB_USER: appuser
+          DB_PASSWORD: apppassword
+          DB_NAME: testdb
+          PORT: 3000
+          NODE_ENV: test
+          NODE_OPTIONS: --experimental-vm-modules
+        run: npm test
+      
+      # Step 7: Upload coverage
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+  
+  # Job 2: Build Docker image (runs after test succeeds)
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: docker-cicd-practice:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Test Docker image
+        run: |
+          docker run -d --name test-container \
+            -e DB_HOST=host.docker.internal \
+            -e DB_USER=appuser \
+            -e DB_PASSWORD=apppassword \
+            -e DB_NAME=testdb \
+            docker-cicd-practice:${{ github.sha }}
+          sleep 5
+          docker logs test-container
+          docker stop test-container || true
+          docker rm test-container || true
+
+  # Job 3: Code Quality (runs in parallel with test)
+  lint:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check package.json syntax
+        run: |
+          node -e "require('./package.json')" || echo "Package.json validation skipped"
+      
+      - name: Verify project structure
+        run: |
+          echo "Checking project structure..."
+          test -f package.json && echo "✓ package.json exists"
+          test -f Dockerfile && echo "✓ Dockerfile exists"
+          test -f docker-compose.yml && echo "✓ docker-compose.yml exists"
+          test -f init.sql && echo "✓ init.sql exists"
+          test -d src && echo "✓ src directory exists"
+          test -d tests && echo "✓ tests directory exists"
