@@ -7,7 +7,7 @@ This plan will guide you through containerization with Docker and setting up CI/
 
 ---
 
-## Phase 1: Docker Desktop Setup & Fundamentals (30 mins)
+## Phase 1: Docker Desktop Setup & Fundamentals
 
 ### Step 1.1: Install Docker Desktop on Windows 10
 1. Download Docker Desktop from [docker.com](https://www.docker.com/products/docker-desktop)
@@ -58,7 +58,7 @@ docker-compose logs -f          # Follow logs in real-time
 
 ---
 
-## Phase 2: Create the Node.js API Project (45 mins)
+## Phase 2: Create the Node.js API Project
 
 ### Step 2.1: Project Setup
 ```bash
@@ -150,7 +150,7 @@ coverage/
 
 ---
 
-## Phase 3: Dockerize the Application (45 mins)
+## Phase 3: Dockerize the Application
 
 ### Step 3.1: Understanding the Dockerfile
 
@@ -337,7 +337,7 @@ services:
 
 ---
 
-## Phase 4: GitHub Actions CI/CD (60 mins)
+## Phase 4: GitHub Actions CI/CD
 
 ### Step 4.1: Understanding GitHub Actions Concepts
 
@@ -587,7 +587,7 @@ jobs:
 
 ---
 
-## Phase 5: Practical Exercises & Real-World Scenarios (30 mins)
+## Phase 5: Practical Exercises & Real-World Scenarios
 
 ### Exercise 1: Add a New Feature with TDD
 1. Write a failing test for `DELETE /users/:id`
@@ -701,7 +701,7 @@ No XAMPP needed! Everything runs in containers.
 
 ---
 
-## Phase 6: Troubleshooting & Best Practices (20 mins)
+## Phase 6: Troubleshooting & Best Practices
 
 ### Common Docker Issues
 
@@ -820,19 +820,19 @@ docker-compose exec mysql mysqladmin ping -h localhost
 
 - [x] Docker Desktop installed and running
 - [x] Node.js API project created with Express
-- [ ] MySQL connection working
-- [ ] Jest tests written and passing locally
-- [ ] Dockerfile created and tested
-- [ ] docker-compose.yml working (can run full stack)
-- [ ] Database initialization script working
-- [ ] GitHub repository created
-- [ ] GitHub Actions workflow created
-- [ ] CI pipeline running successfully
-- [ ] Docker image building in CI
-- [ ] Coverage reports uploaded
-- [ ] Documentation added (README.md)
-- [ ] `.env.example` committed (not `.env`)
-- [ ] First feature added with TDD approach
+- [x] MySQL connection working
+- [x] Jest tests written and passing locally
+- [x] Dockerfile created and tested
+- [x] docker-compose.yml working (can run full stack)
+- [x] Database initialization script working
+- [x] GitHub repository created
+- [x] GitHub Actions workflow created
+- [x] CI pipeline running successfully
+- [x] Docker image building in CI
+- [x] Coverage reports uploaded
+- [x] Documentation added (README.md)
+- [x] `.env.example` committed (not `.env`)
+- [x] First feature added with TDD approach
 
 ---
 
