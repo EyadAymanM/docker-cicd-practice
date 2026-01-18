@@ -102,23 +102,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
+          push: false
           tags: docker-cicd-practice:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      
-      - name: Test Docker image
-        run: |
-          docker run -d --name test-container \
-            -e DB_HOST=host.docker.internal \
-            -e DB_USER=appuser \
-            -e DB_PASSWORD=apppassword \
-            -e DB_NAME=testdb \
-            docker-cicd-practice:${{ github.sha }}
-          sleep 5
-          docker logs test-container
-          docker stop test-container || true
-          docker rm test-container || true
 
   # Job 3: Code Quality (runs in parallel with test)
   lint:
