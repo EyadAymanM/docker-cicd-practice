@@ -291,7 +291,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-### Step 3.5: Common Docker Compose Patterns for Your Company
+### Step 3.5: Common Docker Compose Patterns
 
 **For PHP projects with Apache/Nginx:**
 ```yaml
@@ -315,7 +315,7 @@ services:
       - ./frontend/src:/app/src
 ```
 
-**Full stack example (similar to your company stack):**
+**Full stack example:**
 ```yaml
 services:
   mysql:
@@ -623,9 +623,9 @@ Add a migration step to your workflow:
     npm run migrate
 ```
 
-### Exercise 4: Prepare a Company Project Template
+### Exercise 4: Prepare a Work Project Template
 
-Create a template `docker-compose.company.yml` for new hires:
+Create a template `docker-compose.Work.yml` for new hires:
 ```yaml
 version: '3.8'
 
@@ -780,7 +780,7 @@ docker-compose exec mysql mysqladmin ping -h localhost
 2. ✅ Get comfortable with docker-compose commands
 3. ✅ Create your first passing CI workflow
 4. 📝 Document learnings in a personal wiki/notes
-5. 🎯 Apply to one company project (start small)
+5. 🎯 Apply to one Work project (start small)
 
 ### Advanced Topics to Explore Later
 
@@ -800,7 +800,7 @@ docker-compose exec mysql mysqladmin ping -h localhost
 
 **GitHub Actions:**
 - Reusable workflows (DRY for multiple repos)
-- Self-hosted runners (for company servers)
+- Self-hosted runners (for Work servers)
 - Deployment strategies (blue-green, canary)
 - Automated versioning and releases
 - Security scanning (Dependabot, CodeQL)
@@ -863,7 +863,7 @@ docker-compose exec mysql mysqladmin ping -h localhost
 - Logs are gold - always check them when debugging
 - GitHub Actions is free for public repos, 2000 min/month for private
 
-**For Company Projects:**
+**For Work Projects:**
 - Start with one project, not all at once
 - Document the setup process as you go
 - Create templates that can be reused
