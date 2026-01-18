@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest --coverage --detectOpenHandles --forceExit"
+    "test": "jest --coverage --detectOpenHandles --forceExit",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build"
   },
   "jest": {
     "testEnviroment": "node",
